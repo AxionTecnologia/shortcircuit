@@ -13,7 +13,7 @@ logger = Logger.new 'log/log.txt', 'daily'
 logger.info "[INIT]"
 def listen_for_changes(database, redis, logger)
   db = CouchRest.database("http://localhost:5984/#{database}")
-  since = redis.get "shortcircuit:#{database}:since" || 'now'
+  since = redis.get "shortcircuit:#{database}:since" or 'now'
   opts = {
     :since => since,
     :feed => 'continuous',
