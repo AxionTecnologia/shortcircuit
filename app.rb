@@ -24,8 +24,11 @@ def listen_for_changes(database, redis, logger)
   }
   db.changes opts do |payload|
     pretty_payload = JSON.pretty_generate(payload)
-    #TODO: code that saves the payload to a data store
     logger.info "[EVENT] #{database} : \n#{pretty_payload}"
+    unless redis.sismember "shortcircuit:#{database}:lines:id", payload['id']
+      redis.sadd "shortcircuit:#{database}:lines:id", payload['id']
+      redis.sadd "shortcircuit:#{database}:lines:data", payload['doc'].to_json
+    end
     redis.set "shortcircuit:#{database}:since", payload['seq']
   end
 end
