@@ -8,7 +8,7 @@ redis = Redis.new :driver => :hiredis
 
 databases = redis.smembers 'speedwing:databases'
 
-logger = Logger.new 'log/log.txt', 'daily'
+logger = Logger.new 'log/listener.txt', 'daily'
 
 logger.info "[INIT]"
 
